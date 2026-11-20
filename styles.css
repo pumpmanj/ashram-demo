@@ -185,6 +185,8 @@ p{margin:0}
 
 /* Area + map */
 .area{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(32px,5vw,64px);align-items:center}
+.hero-grid>*,.area>*,.cost>*,.two-col>*,.contact-grid>*,.sits>*,.why>*,.steps>*{min-width:0}
+.mini-check input{width:100%}
 .county-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px}
 .county-list div{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 15px;font-weight:700;color:var(--navy-800)}
 .county-list svg{width:18px;height:18px;color:var(--teal-500)}
