@@ -9,7 +9,9 @@ window.ASHRAM = {
   // launch-only sections.
   licensed: false,
 
-  // Joint Commission accreditation (separate from licensure).
+  // Flip to true the day Joint Commission accreditation is granted.
+  // Separate from licensure: the "Pending Joint Commission
+  // Accreditation" notices stay up until this is true.
   accredited: false,
 
   // Fill in when ready — call buttons appear automatically.
@@ -21,7 +23,12 @@ window.ASHRAM = {
   // formspree.io and paste its endpoint here, e.g.
   // "https://formspree.io/f/abcdwxyz". Until then, forms show
   // a thank-you message but nothing is sent.
-  formEndpoint: ""
+  formEndpoint: "",
+
+  // Résumé upload on the Careers application. Needs a Formspree plan
+  // that includes file uploads (Personal or higher). On the free plan,
+  // set this to false and applicants are asked to email their résumé.
+  resumeUploads: true
 };
 (function (c, d) {
   var h = d.documentElement;

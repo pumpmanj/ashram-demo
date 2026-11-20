@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Services | Ashram Home Healthcare</title>
-<meta name="description" content="Skilled nursing, private duty nursing, home health aide, wound care, infusion nursing, education, and care coordination in Northwest Florida.">
+<meta name="description" content="Skilled nursing, private duty and pediatric nursing, home health aide, companion care, wound care, infusion nursing, education, and care coordination in Northwest Florida.">
 <meta name="theme-color" content="#0F2C4A">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ashram Home Healthcare">
 <meta property="og:title" content="Services | Ashram Home Healthcare">
-<meta property="og:description" content="Skilled nursing, private duty nursing, home health aide, wound care, infusion nursing, education, and care coordination in Northwest Florida.">
+<meta property="og:description" content="Skilled nursing, private duty and pediatric nursing, home health aide, companion care, wound care, infusion nursing, education, and care coordination in Northwest Florida.">
 <meta property="og:image" content="og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%23FAF4EC'/%3E%3Cpath d='M62 100 L100 66 L138 100' fill='none' stroke='%23E8742A' stroke-width='12' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M100 150 C80 134 70 122 76 110 C82 99 95 101 100 111 C105 101 118 99 124 110 C130 122 120 134 100 150Z' fill='none' stroke='%232A9D96' stroke-width='11'/%3E%3C/svg%3E">
@@ -76,10 +76,10 @@
   </defs>
 </svg>
 <header class="header" id="header">
-  <div class="statusbar if-pending" role="note">
-    <span><svg><use href="#i-hourglass"/></svg>Pending AHCA Licensure</span>
-    <i class="sep"></i>
-    <span><svg><use href="#i-hourglass"/></svg>Pending Joint Commission Accreditation</span>
+  <div class="statusbar if-any-pending" role="note">
+    <span class="if-pending"><svg><use href="#i-hourglass"/></svg>Pending AHCA Licensure</span>
+    <i class="sep if-pending if-jc-pending"></i>
+    <span class="if-jc-pending"><svg><use href="#i-hourglass"/></svg>Pending Joint Commission Accreditation</span>
   </div>
   <div class="header-row">
     <div class="wrap">
@@ -89,13 +89,13 @@
       </a>
       <nav class="nav" aria-label="Main">
         <a href="services.html" aria-current="page">Services</a>
-        <a href="about.html">About</a>
         <a href="referrals.html">For Providers</a>
         <a href="careers.html">Careers</a>
         <a href="contact.html">Contact</a>
+        <a href="about.html">About</a>
       </nav>
       <div class="header-cta">
-        <a class="header-phone if-phone" data-phone-link href="#"><svg><use href="#i-phone"/></svg><span data-phone></span></a>
+        <a class="btn btn-call if-phone" data-phone-link href="#"><svg><use href="#i-phone"/></svg>Call us now</a>
         <button class="btn btn-primary" data-open="family">Talk with our team</button>
         <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -108,10 +108,10 @@
   <button class="mobile-close" id="menuClose" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
   <a href="index.html">Home</a>
   <a href="services.html">Services</a>
-  <a href="about.html">About</a>
   <a href="referrals.html">For Providers</a>
   <a href="careers.html">Careers</a>
   <a href="contact.html">Contact</a>
+  <a href="about.html">About</a>
   <button class="btn btn-primary" data-open="family">Talk with our team</button>
 </nav>
 <main id="main">
@@ -128,20 +128,22 @@
 <section class="section bg-cream">
   <div class="wrap">
     <div class="svc-list">
-<details class="svc reveal" id="skilled" open><summary><span class="si"><svg><use href="#i-steth"/></svg></span><span><strong>Skilled Nursing</strong><span>A nurse visits your home</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
-  <div class="svc-body"><div><h4>What it is</h4><p>A licensed nurse visits on a schedule to check your health, manage medications, and keep your doctor informed.</p><h4 style="margin-top:18px">Who it helps</h4><p>People recovering from a hospital stay or surgery, or living with heart, lung, diabetes, or other ongoing conditions.</p></div><div><h4>What's included</h4><ul><li><svg><use href="#i-check"/></svg><span>Health assessments and vital signs</span></li><li><svg><use href="#i-check"/></svg><span>Medication management</span></li><li><svg><use href="#i-check"/></svg><span>Managing chronic conditions</span></li><li><svg><use href="#i-check"/></svg><span>Recovery after hospital or surgery</span></li><li><svg><use href="#i-check"/></svg><span>Updates to your doctor</span></li><li><svg><use href="#i-check"/></svg><span>Teaching for you and your family</span></li></ul></div></div></details>
-<details class="svc reveal" id="pdn"><summary><span class="si"><svg><use href="#i-clipboard"/></svg></span><span><strong>Private Duty Nursing</strong><span>Longer nursing visits for complex needs</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
-  <div class="svc-body"><div><h4>What it is</h4><p>Extended nursing care at home for patients who need more hours of skilled support.</p><h4 style="margin-top:18px">Who it helps</h4><p>Adults or children with complex or ongoing medical needs who need a nurse for longer periods.</p></div><div><h4>What's included</h4><ul><li><svg><use href="#i-check"/></svg><span>Extended nursing shifts at home</span></li><li><svg><use href="#i-check"/></svg><span>Ongoing clinical monitoring</span></li><li><svg><use href="#i-check"/></svg><span>Care coordinated with your physician</span></li><li><svg><use href="#i-check"/></svg><span>Subject to eligibility, physician orders, and payer approval</span></li></ul></div></div></details>
-<details class="svc reveal" id="aide"><summary><span class="si"><svg><use href="#i-hand"/></svg></span><span><strong>Home Health Aide</strong><span>Help with daily routines</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
-  <div class="svc-body"><div><h4>What it is</h4><p>A trained aide helps with personal care, so daily life is safer and easier.</p><h4 style="margin-top:18px">Who it helps</h4><p>Anyone who needs a hand with bathing, dressing, or moving around safely.</p></div><div><h4>What's included</h4><ul><li><svg><use href="#i-check"/></svg><span>Bathing and grooming</span></li><li><svg><use href="#i-check"/></svg><span>Dressing and personal hygiene</span></li><li><svg><use href="#i-check"/></svg><span>Moving safely around the home</span></li><li><svg><use href="#i-check"/></svg><span>Help with meals</span></li><li><svg><use href="#i-check"/></svg><span>Light housekeeping related to care</span></li></ul></div></div></details>
-<details class="svc reveal" id="wound"><summary><span class="si"><svg><use href="#i-bandage"/></svg></span><span><strong>Wound Care</strong><span>Healing wounds safely at home</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
-  <div class="svc-body"><div><h4>What it is</h4><p>Nurse visits to clean, treat, and watch a wound, with updates to your doctor.</p><h4 style="margin-top:18px">Who it helps</h4><p>People with surgical wounds, pressure sores, diabetic wounds, or wounds that are slow to heal.</p></div><div><h4>What's included</h4><ul><li><svg><use href="#i-check"/></svg><span>Wound assessment and treatment</span></li><li><svg><use href="#i-check"/></svg><span>Dressing changes</span></li><li><svg><use href="#i-check"/></svg><span>Watching for signs of infection</span></li><li><svg><use href="#i-check"/></svg><span>Teaching on wound care</span></li><li><svg><use href="#i-check"/></svg><span>Updates to your physician</span></li></ul></div></div></details>
-<details class="svc reveal" id="infusion"><summary><span class="si"><svg><use href="#i-drop"/></svg></span><span><strong>Infusion Nursing</strong><span>IV medication at home</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
-  <div class="svc-body"><div><h4>What it is</h4><p>A nurse gives IV medications and cares for IV lines safely at home.</p><h4 style="margin-top:18px">Who it helps</h4><p>Patients prescribed IV therapy who'd rather be treated at home than at a clinic.</p></div><div><h4>What's included</h4><ul><li><svg><use href="#i-check"/></svg><span>IV medication given by a nurse</span></li><li><svg><use href="#i-check"/></svg><span>IV line care</span></li><li><svg><use href="#i-check"/></svg><span>Monitoring during treatment</span></li><li><svg><use href="#i-check"/></svg><span>Coordination with your doctor and pharmacy</span></li></ul></div></div></details>
-<details class="svc reveal" id="education"><summary><span class="si"><svg><use href="#i-book"/></svg></span><span><strong>Patient and Caregiver Education</strong><span>Confidence to manage care at home</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
-  <div class="svc-body"><div><h4>What it is</h4><p>Simple, practical teaching so you and your family know what to do between visits.</p><h4 style="margin-top:18px">Who it helps</h4><p>Patients and family caregivers adjusting to a new diagnosis, medication, or routine.</p></div><div><h4>What's included</h4><ul><li><svg><use href="#i-check"/></svg><span>Understanding your condition</span></li><li><svg><use href="#i-check"/></svg><span>Managing medications</span></li><li><svg><use href="#i-check"/></svg><span>Warning signs to watch for</span></li><li><svg><use href="#i-check"/></svg><span>Safe care techniques for family</span></li></ul></div></div></details>
-<details class="svc reveal" id="coordination"><summary><span class="si"><svg><use href="#i-network"/></svg></span><span><strong>Care Coordination</strong><span>Everyone on the same page</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
-  <div class="svc-body"><div><h4>What it is</h4><p>We keep your doctors, specialists, and family connected and informed.</p><h4 style="margin-top:18px">Who it helps</h4><p>Anyone with several doctors or a recent move from hospital to home.</p></div><div><h4>What's included</h4><ul><li><svg><use href="#i-check"/></svg><span>Communication with your physicians</span></li><li><svg><use href="#i-check"/></svg><span>Smooth hospital-to-home transitions</span></li><li><svg><use href="#i-check"/></svg><span>Updates for your family</span></li><li><svg><use href="#i-check"/></svg><span>Coordination with other providers</span></li></ul></div></div></details>
+<details class="svc reveal" id="skilled" open><summary><span class="si"><svg><use href="#i-steth"/></svg></span><span><h2 class="svc-title">Skilled Nursing</h2><span>A nurse visits your home</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
+  <div class="svc-body"><div><h3>What it is</h3><p>A licensed nurse visits on a schedule to check your health, manage medications, and keep your doctor informed.</p><h3 style="margin-top:18px">Who it helps</h3><p>People recovering from a hospital stay or surgery, or living with heart, lung, diabetes, or other ongoing conditions.</p></div><div><h3>What's included</h3><ul><li><svg><use href="#i-check"/></svg><span>Health assessments and vital signs</span></li><li><svg><use href="#i-check"/></svg><span>Medication management</span></li><li><svg><use href="#i-check"/></svg><span>Managing chronic conditions</span></li><li><svg><use href="#i-check"/></svg><span>Recovery after hospital or surgery</span></li><li><svg><use href="#i-check"/></svg><span>Updates to your doctor</span></li><li><svg><use href="#i-check"/></svg><span>Teaching for you and your family</span></li></ul></div></div></details>
+<details class="svc reveal" id="pdn"><summary><span class="si"><svg><use href="#i-clipboard"/></svg></span><span><h2 class="svc-title">Private Duty Nursing</h2><span>Extended nursing for children and adults</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
+  <div class="svc-body"><div><h3>What it is</h3><p>Extended, shift-based nursing at home for patients with complex medical needs, including specialized pediatric nursing.</p><h3 style="margin-top:18px">Who it helps</h3><p>Children and adults who need a skilled nurse for longer periods, such as medically fragile children living at home.</p></div><div><h3>What's included</h3><ul><li><svg><use href="#i-check"/></svg><span>G-tube (feeding tube) care</span></li><li><svg><use href="#i-check"/></svg><span>Tracheostomy care</span></li><li><svg><use href="#i-check"/></svg><span>Ventilator management</span></li><li><svg><use href="#i-check"/></svg><span>TPN (IV nutrition)</span></li><li><svg><use href="#i-check"/></svg><span>Seizure management</span></li><li><svg><use href="#i-check"/></svg><span>Other specialized pediatric nursing</span></li><li><svg><use href="#i-check"/></svg><span>Extended nursing shifts at home</span></li><li><svg><use href="#i-check"/></svg><span>Care coordinated with your physician</span></li><li><svg><use href="#i-check"/></svg><span>Subject to eligibility, physician orders, and payer approval</span></li></ul></div></div></details>
+<details class="svc reveal" id="aide"><summary><span class="si"><svg><use href="#i-hand"/></svg></span><span><h2 class="svc-title">Home Health Aide</h2><span>Help with daily routines</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
+  <div class="svc-body"><div><h3>What it is</h3><p>A trained aide helps with personal care, so daily life is safer and easier.</p><h3 style="margin-top:18px">Who it helps</h3><p>Anyone who needs a hand with bathing, dressing, or moving around safely.</p></div><div><h3>What's included</h3><ul><li><svg><use href="#i-check"/></svg><span>Bathing and grooming</span></li><li><svg><use href="#i-check"/></svg><span>Dressing and personal hygiene</span></li><li><svg><use href="#i-check"/></svg><span>Moving safely around the home</span></li><li><svg><use href="#i-check"/></svg><span>Help with meals</span></li><li><svg><use href="#i-check"/></svg><span>Light housekeeping related to care</span></li></ul></div></div></details>
+<details class="svc reveal" id="companion"><summary><span class="si"><svg><use href="#i-heart"/></svg></span><span><h2 class="svc-title">Companion Care</h2><span>Company and help around the home</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
+  <div class="svc-body"><div><h3>What it is</h3><p>Friendly, non-medical support that keeps your loved one engaged, safe, and comfortable at home.</p><h3 style="margin-top:18px">Who it helps</h3><p>Older adults and anyone who lives alone, feels isolated, or needs a hand with everyday tasks.</p></div><div><h3>What's included</h3><ul><li><svg><use href="#i-check"/></svg><span>Companionship and conversation</span></li><li><svg><use href="#i-check"/></svg><span>Light housekeeping and laundry</span></li><li><svg><use href="#i-check"/></svg><span>Meal preparation</span></li><li><svg><use href="#i-check"/></svg><span>Errands and shopping</span></li><li><svg><use href="#i-check"/></svg><span>Reminders and safety checks</span></li><li><svg><use href="#i-check"/></svg><span>Respite for family caregivers</span></li></ul></div></div></details>
+<details class="svc reveal" id="wound"><summary><span class="si"><svg><use href="#i-bandage"/></svg></span><span><h2 class="svc-title">Wound Care</h2><span>Healing wounds safely at home</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
+  <div class="svc-body"><div><h3>What it is</h3><p>Nurse visits to clean, treat, and watch a wound, with updates to your doctor.</p><h3 style="margin-top:18px">Who it helps</h3><p>People with surgical wounds, pressure sores, diabetic wounds, or wounds that are slow to heal.</p></div><div><h3>What's included</h3><ul><li><svg><use href="#i-check"/></svg><span>Wound assessment and treatment</span></li><li><svg><use href="#i-check"/></svg><span>Dressing changes</span></li><li><svg><use href="#i-check"/></svg><span>Watching for signs of infection</span></li><li><svg><use href="#i-check"/></svg><span>Teaching on wound care</span></li><li><svg><use href="#i-check"/></svg><span>Updates to your physician</span></li></ul></div></div></details>
+<details class="svc reveal" id="infusion"><summary><span class="si"><svg><use href="#i-drop"/></svg></span><span><h2 class="svc-title">Infusion Nursing</h2><span>IV medication at home</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
+  <div class="svc-body"><div><h3>What it is</h3><p>A nurse gives IV medications and cares for IV lines safely at home.</p><h3 style="margin-top:18px">Who it helps</h3><p>Patients prescribed IV therapy who'd rather be treated at home than at a clinic.</p></div><div><h3>What's included</h3><ul><li><svg><use href="#i-check"/></svg><span>IV medication given by a nurse</span></li><li><svg><use href="#i-check"/></svg><span>IV line care</span></li><li><svg><use href="#i-check"/></svg><span>Monitoring during treatment</span></li><li><svg><use href="#i-check"/></svg><span>Coordination with your doctor and pharmacy</span></li></ul></div></div></details>
+<details class="svc reveal" id="education"><summary><span class="si"><svg><use href="#i-book"/></svg></span><span><h2 class="svc-title">Patient and Caregiver Education</h2><span>Confidence to manage care at home</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
+  <div class="svc-body"><div><h3>What it is</h3><p>Simple, practical teaching so you and your family know what to do between visits.</p><h3 style="margin-top:18px">Who it helps</h3><p>Patients and family caregivers adjusting to a new diagnosis, medication, or routine.</p></div><div><h3>What's included</h3><ul><li><svg><use href="#i-check"/></svg><span>Understanding your condition</span></li><li><svg><use href="#i-check"/></svg><span>Managing medications</span></li><li><svg><use href="#i-check"/></svg><span>Warning signs to watch for</span></li><li><svg><use href="#i-check"/></svg><span>Safe care techniques for family</span></li></ul></div></div></details>
+<details class="svc reveal" id="coordination"><summary><span class="si"><svg><use href="#i-network"/></svg></span><span><h2 class="svc-title">Care Coordination</h2><span>Everyone on the same page</span></span><span class="plus"><svg><use href="#i-plus"/></svg></span></summary>
+  <div class="svc-body"><div><h3>What it is</h3><p>We keep your doctors, specialists, and family connected and informed.</p><h3 style="margin-top:18px">Who it helps</h3><p>Anyone with several doctors or a recent move from hospital to home.</p></div><div><h3>What's included</h3><ul><li><svg><use href="#i-check"/></svg><span>Communication with your physicians</span></li><li><svg><use href="#i-check"/></svg><span>Smooth hospital-to-home transitions</span></li><li><svg><use href="#i-check"/></svg><span>Updates for your family</span></li><li><svg><use href="#i-check"/></svg><span>Coordination with other providers</span></li></ul></div></div></details>
     </div>
     <p class="fine reveal">Services are provided within our licensed scope and follow physician orders, eligibility, and payer requirements.<span class="if-pending"> Ashram will begin providing services upon AHCA licensure.</span></p>
   </div>
@@ -180,11 +182,12 @@
         </a>
         <p style="font-family:var(--serif);font-style:italic;font-size:20px;color:#fff">A Sanctuary of Healing in Your Home</p>
       </div>
-      <div><h4>Care</h4><ul><li><a href="services.html">Services</a></li><li><a href="index.html#area">Service area</a></li><li><a href="about.html">About us</a></li></ul></div>
-      <div><h4>Work with us</h4><ul><li><a href="referrals.html">For providers</a></li><li><a href="careers.html">Careers</a></li><li><a href="contact.html">Contact</a></li></ul></div>
-      <div><h4>Office</h4><ul><li>5113 N. Davis Hwy, Unit 5<br>Pensacola, FL 32503</li><li><a data-email href="#"></a></li><li class="if-phone">Phone: <a data-phone-link href="#"><span data-phone></span></a></li><li class="if-fax">Fax: <span data-fax></span></li><li class="if-no-phone">Phone: coming soon</li></ul></div>
+      <div><p class="fh">Care</p><ul><li><a href="services.html">Services</a></li><li><a href="index.html#area">Service area</a></li><li><a href="about.html">About us</a></li></ul></div>
+      <div><p class="fh">Work with us</p><ul><li><a href="referrals.html">For providers</a></li><li><a href="careers.html">Careers</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div><p class="fh">Office</p><ul><li>5113 N. Davis Hwy, Unit 5<br>Pensacola, FL 32503</li><li><a data-email href="mailto:Ashramhhc@outlook.com">Ashramhhc@outlook.com</a></li><li class="if-phone">Phone: <a data-phone-link href="#"><span data-phone></span></a></li><li class="if-fax">Fax: <span data-fax></span></li><li class="if-no-phone">Phone: coming soon</li></ul></div>
     </div>
     <p class="disclaimer if-pending">Ashram Home Healthcare LLC is pending licensure by the Florida Agency for Health Care Administration (AHCA) and is pursuing accreditation by The Joint Commission. Ashram is not yet licensed or accredited and is not yet providing patient care. Services described on this site will be offered only after required approvals are obtained, within our licensed scope.</p>
+    <p class="disclaimer if-jc-only if-jc-pending">Ashram Home Healthcare LLC is pursuing accreditation by The Joint Commission and is not yet accredited.</p>
     <div class="footer-bottom">
       <span>&copy; <span id="yr">2026</span> Ashram Home Healthcare LLC</span>
       <span><a href="privacy.html">Privacy policy</a> &middot; Escambia &middot; Santa Rosa &middot; Okaloosa &middot; Walton</span>
@@ -192,7 +195,7 @@
   </div>
 </footer>
 <div class="call-bar" id="callBar">
-  <a class="c1 if-phone" data-phone-link href="#"><svg><use href="#i-phone"/></svg>Call</a>
+  <a class="c1 if-phone" data-phone-link href="#"><svg><use href="#i-phone"/></svg>Call now</a>
   <a class="c1 if-no-phone" href="contact.html"><svg><use href="#i-mail"/></svg>Contact</a>
   <button class="c2" data-open="family">Talk with our team</button>
 </div>

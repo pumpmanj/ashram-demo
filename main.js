@@ -1,6 +1,7 @@
 /* Ashram Home Healthcare — shared behavior */
 (function () {
   const C = window.ASHRAM || {};
+  document.documentElement.classList.add('js-ready');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
   const ic = id => '<svg><use href="#' + id + '"/></svg>';
@@ -37,6 +38,28 @@
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }), {threshold:.12, rootMargin:'0px 0px -30px 0px'});
   $$('.reveal').forEach(el => io.observe(el));
 
+  /* ---- Service circle: chips orbit slowly; pause on hover/focus ---- */
+  const orbit = $('#orbit');
+  if (orbit){
+    const chips = [...orbit.querySelectorAll('.float-chip')];
+    let ang = -90, paused = false, last = performance.now();
+    const place = () => chips.forEach((c, i) => {
+      const a = (ang + i * 360 / chips.length) * Math.PI / 180;
+      c.style.left = (50 + 47 * Math.cos(a)) + '%';
+      c.style.top = (50 + 47 * Math.sin(a)) + '%';
+    });
+    place();
+    orbit.addEventListener('mouseenter', () => paused = true);
+    orbit.addEventListener('mouseleave', () => paused = false);
+    orbit.addEventListener('focusin', () => paused = true);
+    orbit.addEventListener('focusout', () => paused = false);
+    if (!reduce) (function tick(t){
+      const dt = Math.min(t - last, 100); last = t;
+      if (!paused && !document.hidden){ ang += dt * 360 / 70000; place(); }
+      requestAnimationFrame(tick);
+    })(last);
+  }
+
   /* ---- Map ---- */
   const COUNTIES = [
     {k:'escambia', n:'Escambia', d:'M40 60 L170 60 L170 262 L156 298 L120 322 L66 334 L52 300 L64 240 L48 160 Z', lx:108, ly:170,
@@ -51,7 +74,7 @@
   const CITIES = [['Pensacola',150,292,1],['Milton',228,236],['Gulf Breeze',196,318,0,'end'],['Navarre',262,322],['Crestview',366,128],['Fort Walton Beach',318,312],['Destin',398,326],['DeFuniak Springs',515,118],['Santa Rosa Beach',508,318]];
   function mapSVG(){
     let s = '<svg viewBox="0 0 800 420" role="img" aria-label="Map of Northwest Florida showing Escambia, Santa Rosa, Okaloosa, and Walton Counties">';
-    s += '<rect width="800" height="60" fill="#EDE4D7"/><text x="320" y="38" font-family="Plus Jakarta Sans,sans-serif" font-size="13" font-weight="700" letter-spacing="6" fill="#17426E" opacity=".4">ALABAMA</text>';
+    s += '<rect width="800" height="60" fill="#EDE4D7"/><line x1="0" y1="60" x2="800" y2="60" stroke="#17426E" stroke-opacity=".35" stroke-width="2" stroke-dasharray="6 6"/><text x="400" y="40" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-size="13" font-weight="700" letter-spacing="3" fill="#17426E" opacity=".5">FLORIDA\u2013ALABAMA STATE LINE</text>';
     s += '<path d="M0 340 C60 336 100 344 160 336 C230 330 300 342 380 340 C460 338 520 334 600 332 C680 330 740 316 800 300 L800 420 L0 420 Z" fill="#CFE6EC"/>';
     s += '<path d="M590 60 L760 60 L760 150 L590 150 Z M566 158 L590 150 L760 150 L800 290 L720 326 L566 326 Z" fill="#E8DFD2" stroke="#fff" stroke-width="3"/>';
     COUNTIES.forEach(c => { s += '<path class="county" data-k="' + c.k + '" d="' + c.d + '"><title>' + c.n + ' County</title></path>'; });
@@ -82,10 +105,20 @@
   });
 
   /* ---- Form sending ---- */
-  async function send(kind, data){
-    if (!C.formEndpoint) { console.info('[Ashram] formEndpoint not set in config.js. Submission not sent:', kind, data); return true; }
+  async function send(kind, data, file){
+    if (!C.formEndpoint) { console.info('[Ashram] formEndpoint not set in config.js. Submission not sent:', kind, data, file ? file.name : ''); return true; }
     try {
-      const res = await fetch(C.formEndpoint, {method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(Object.assign({_form:kind, _page:location.pathname}, data))});
+      const payload = Object.assign({_form:kind, _page:location.pathname}, data);
+      let opts;
+      if (file){
+        const fd = new FormData();
+        Object.keys(payload).forEach(k => fd.append(k, payload[k] == null ? '' : payload[k]));
+        fd.append('resume', file, file.name);
+        opts = {method:'POST', headers:{'Accept':'application/json'}, body:fd};
+      } else {
+        opts = {method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(payload)};
+      }
+      const res = await fetch(C.formEndpoint, opts);
       return res.ok;
     } catch (e) { return false; }
   }
@@ -100,18 +133,21 @@
     [n, m].forEach(x => { const bad = !x.value.trim() || (x.type === 'email' && !validEmail(x.value)); x.classList.toggle('bad', bad); if (bad) ok = false; });
     if (!ok) return;
     const data = {}; cf.querySelectorAll('[name]').forEach(f => { if (f.name !== 'website') data[f.name] = f.value; });
-    await send('contact', data);
-    cf.classList.add('sent');
+    const btn = cf.querySelector('button[type=submit]'); btn.disabled = true;
+    const ok2 = await send('contact', data);
+    btn.disabled = false;
+    if (ok2) cf.classList.add('sent');
+    else cf.querySelector('.form-error').classList.add('show');
   });
 
   /* ================= GUIDED FLOW ================= */
   const OPTS = {
     audience:[['family','Care for me or a loved one','i-home','Patients and families'],['referral','I’m a healthcare provider','i-steth','Physician, hospital, case manager, social worker'],['career','I’m looking for a job','i-briefcase','Nurses, aides, and office roles'],['partner','Insurance or business inquiry','i-dollar','Payers, partners, vendors']],
     who:[['Myself','Myself','i-user'],['My parent','My parent','i-users'],['My spouse or partner','My spouse or partner','i-heart'],['My child','My child','i-sun'],['Someone else','Someone else','i-home']],
-    situ:[['Coming home from the hospital','Coming home from the hospital or surgery','i-hospital'],['Wound care','A wound that needs care','i-bandage'],['IV therapy','IV medication at home','i-drop'],['Ongoing health condition','Managing an ongoing condition','i-steth'],['Help with daily living','Help bathing, dressing, moving','i-hand'],['Complex care','Complex care or longer nursing visits','i-clipboard'],['Not sure','Not sure yet','i-info']],
+    situ:[['Coming home from the hospital','Coming home from the hospital or surgery','i-hospital'],['Wound care','A wound that needs care','i-bandage'],['IV therapy','IV medication at home','i-drop'],['Ongoing health condition','Managing an ongoing condition','i-steth'],['Help with daily living','Help bathing, dressing, moving','i-hand'],['Complex care','Complex or pediatric nursing care','i-clipboard'],['Companionship','Companionship and help at home','i-heart'],['Not sure','Not sure yet','i-info']],
     county:[['Escambia','Escambia County','i-pin'],['Santa Rosa','Santa Rosa County','i-pin'],['Okaloosa','Okaloosa County','i-pin'],['Walton','Walton County','i-pin'],['Other','Somewhere else','i-map']],
     refRole:[['Physician / medical office','Physician or medical office','i-steth'],['Hospital / discharge planning','Hospital or discharge planning','i-building'],['Case manager / social worker','Case manager or social worker','i-users'],['Other provider','Other healthcare provider','i-hospital']],
-    jobRole:[['RN','Registered Nurse (RN)','i-steth'],['LPN','Licensed Practical Nurse (LPN)','i-hospital'],['HHA / CNA','Home Health Aide / CNA','i-hand'],['Office','Office or intake','i-briefcase'],['Other','Other role','i-user']],
+    jobRole:[['RN','Registered Nurse (RN)','i-steth'],['LPN','Licensed Practical Nurse (LPN)','i-hospital'],['Pediatric / PDN nurse','Pediatric or private duty nurse','i-clipboard'],['HHA / CNA','Home Health Aide / CNA','i-hand'],['Office','Office or intake','i-briefcase'],['Other','Other role','i-user']],
     topic:[['Insurance / payer','Insurance or payer partnership','i-dollar'],['Healthcare partnership','Healthcare partnership','i-network'],['Business inquiry','Vendor or business inquiry','i-building'],['Other','Something else','i-chat']]
   };
   const PENDING_NOTE = '<span class="if-pending">We’re completing AHCA licensure now. Reach out today and we’ll help you plan ahead.</span>';
@@ -120,19 +156,19 @@
       {id:'who', type:'single', opts:'who', q:'Who is the care for?', sub:'We’ll tailor everything to them.'},
       {id:'situ', type:'multi', opts:'situ', q:'What’s going on?', sub:'Choose all that apply.'},
       {id:'county', type:'single', opts:'county', q:'Where would care be needed?', sub:'We serve four Northwest Florida counties.'},
-      {type:'form', fields:['name','phone','email'], q:'How can we reach you?', sub:'A member of our team will reach out to talk through your options.', btn:'Send'}],
+      {type:'form', fields:['name','phone','email','source','comments'], q:'How can we reach you?', sub:'A member of our team will reach out to talk through your options, including new patient admissions.', btn:'Send'}],
       done:{pending:['We’ll reach out to answer your questions.','We’ll explain your care and coverage options.','We’ll contact you as soon as we’re licensed to begin care.'],
             open:['A member of our team will contact you shortly.','We’ll talk through care, coverage, and next steps.','Then we’ll coordinate with your doctor to begin care.']}},
     referral:{label:'Become a referral partner', steps:[
       {id:'role', type:'single', opts:'refRole', q:'What best describes you?', sub:'So we send the right information.'},
       {id:'county', type:'multi', opts:'county', q:'Where are your patients?', sub:'Choose all that apply.'},
-      {type:'form', fields:['name','org','email','phone'], q:'How can we reach you?', sub:'We’ll introduce our team and our referral process.', btn:'Send'}],
+      {type:'form', fields:['name','org','email','phone','comments'], q:'How can we reach you?', sub:'We’ll introduce our team and our referral process.', btn:'Send'}],
       done:{pending:['We’ll reach out to introduce our team.','We’ll share our services and referral process.','We’ll let you know the day we begin accepting referrals.'],
             open:['Our intake team will contact you shortly.','We’ll share our referral process and contacts.','Send your first referral anytime.']}},
     career:{label:'Apply to join our team', steps:[
       {id:'role', type:'single', opts:'jobRole', q:'What role are you interested in?', sub:'We’re building our founding team.'},
       {id:'county', type:'multi', opts:'county', q:'Where would you like to work?', sub:'Choose all that apply.'},
-      {type:'form', fields:['name','phone','email','note'], q:'How can we reach you?', sub:'No résumé needed yet. We’ll ask when we talk.', btn:'Apply'}],
+      {type:'form', fields:['name','phone','email','note','resume','comments'], q:'How can we reach you?', sub:'Attach your résumé if you have one ready. It’s optional.', btn:'Apply'}],
       done:{pending:['We’ll review your information.','We’ll reach out to set up a conversation.','You’ll be among the first we consider as we hire.'],
             open:['We’ll review your information.','We’ll reach out to set up a conversation.','Interviews move quickly.']}},
     partner:{label:'Contact us', steps:[
@@ -146,7 +182,10 @@
     email:{label:'Email', type:'email', ac:'email', req:false},
     phone:{label:'Phone', type:'tel', ac:'tel', req:false},
     note:{label:'License or certification', type:'text', ac:'off', req:false},
-    message:{label:'Message', type:'textarea', req:false}
+    message:{label:'Message or comments', type:'textarea', req:false},
+    comments:{label:'Comments', type:'textarea', req:false},
+    source:{label:'How did you hear about us?', type:'select', req:false, opts:['Hospital or discharge planner','Physician’s office','Case manager or social worker','Family or friend','Google search','Social media','Insurance company','Other']},
+    resume:{label:'Résumé', type:'file', req:false}
   };
   const flow = $('#flow'), body = $('#flowBody'), prog = $('#flowProgress'), back = $('#flowBack'), next = $('#flowNext'), foot = $('#flowFoot');
   let st = {path:null, i:0, data:{}, direct:false}, lastFocus = null, sending = false;
@@ -171,10 +210,16 @@
       h += '<h2>' + s.q + '</h2><p class="q-sub">' + s.sub + '</p>';
       s.fields.forEach(k => {
         const f = FIELDS[k], v = st.data['f_' + k] || '';
-        h += '<div class="field"><label for="ff-' + k + '">' + f.label + (f.req || k === 'phone' || k === 'email' ? '' : ' <small>(optional)</small>') + '</label>' +
+        h += '<div class="field' + (f.type === 'file' ? ' file-field' : '') + '"><label for="ff-' + k + '">' + f.label + (f.req || k === 'phone' || k === 'email' ? '' : ' <small>(optional)</small>') + '</label>' +
           (f.type === 'textarea' ? '<textarea id="ff-' + k + '" data-f="' + k + '">' + esc(v) + '</textarea>'
-            : '<input id="ff-' + k + '" data-f="' + k + '" type="' + f.type + '" autocomplete="' + f.ac + '" value="' + esc(v) + '">') + '</div>';
+          : f.type === 'select' ? '<select id="ff-' + k + '" data-f="' + k + '"><option value="">Choose one</option>' + f.opts.map(o => '<option' + (o === v ? ' selected' : '') + '>' + esc(o) + '</option>').join('') + '</select>'
+          : f.type === 'file' ? (C.resumeUploads === false
+              ? '<p class="file-hint" style="margin:0">Email your résumé to <a href="mailto:' + C.email + '">' + C.email + '</a>.</p>'
+              : '<input id="ff-' + k + '" data-f="' + k + '" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><span class="file-hint">' + (st.file ? 'Attached: ' + esc(st.file.name) + '. ' : '') + 'PDF or Word, up to 10 MB.</span>')
+          : '<input id="ff-' + k + '" data-f="' + k + '" type="' + f.type + '" autocomplete="' + f.ac + '" value="' + esc(v) + '">') + '</div>';
       });
+      h += '<div class="hp" aria-hidden="true"><label for="ff-hp">Website</label><input id="ff-hp" tabindex="-1" autocomplete="off"></div>';
+      h += '<div class="form-error" id="ffErr">We couldn\u2019t send that just now. Please try again, or email us at <a href="mailto:' + C.email + '">' + C.email + '</a>.</div>';
       h += '<p class="privacy-note" id="ffHint">' + ic('i-info') + '<span>A phone number or email is fine, whichever you prefer.</span></p>';
       h += '<p class="privacy-note">' + ic('i-lock') + '<span>Private and secure. Please don’t include medical details here. ' + PENDING_NOTE + '</span></p>';
     } else {
@@ -212,7 +257,18 @@
         setTimeout(() => { if (st.i === at) go(1); }, reduce ? 0 : 260);
       }
     });
-    body.querySelectorAll('[data-f]').forEach(inp => inp.oninput = () => { st.data['f_' + inp.dataset.f] = inp.value; inp.classList.remove('bad'); });
+    body.querySelectorAll('[data-f]').forEach(inp => {
+      if (inp.type === 'file'){
+        inp.onchange = () => {
+          const f = inp.files[0], hint = inp.nextElementSibling;
+          inp.classList.remove('bad');
+          if (f && f.size > 10 * 1024 * 1024){ inp.value = ''; st.file = null; inp.classList.add('bad'); hint.textContent = 'That file is over 10 MB. Please choose a smaller one.'; return; }
+          st.file = f || null; hint.textContent = f ? 'Attached: ' + f.name : 'PDF or Word, up to 10 MB.';
+        };
+      } else {
+        inp.oninput = inp.onchange = () => { st.data['f_' + inp.dataset.f] = inp.value; inp.classList.remove('bad'); };
+      }
+    });
     const d = $('#flowDone'); if (d) d.onclick = close;
   }
   async function go(dir){
@@ -221,18 +277,24 @@
       if (sending) return;
       let ok = true, firstBad = null;
       s.fields.forEach(k => {
-        const f = FIELDS[k], inp = body.querySelector('[data-f="' + k + '"]'), v = inp.value.trim();
+        const f = FIELDS[k], inp = body.querySelector('[data-f="' + k + '"]');
+        if (!inp || f.type === 'file') return;
+        const v = inp.value.trim();
         const bad = (f.req && !v) || (f.type === 'email' && v && !validEmail(v));
         inp.classList.toggle('bad', bad); if (bad){ ok = false; firstBad = firstBad || inp; }
       });
       const ph = body.querySelector('[data-f="phone"]'), em = body.querySelector('[data-f="email"]');
       if (ok && ph && em && !ph.value.trim() && !em.value.trim()){ ok = false; ph.classList.add('bad'); em.classList.add('bad'); firstBad = ph; }
       if (!ok){ firstBad.focus(); return; }
-      sending = true; next.disabled = true;
-      const out = {type:st.path};
-      Object.keys(st.data).forEach(k => { out[k.replace(/^f_/, '')] = Array.isArray(st.data[k]) ? st.data[k].join(', ') : st.data[k]; });
-      await send('flow-' + st.path, out);
-      sending = false;
+      const hp = body.querySelector('#ff-hp');
+      if (!(hp && hp.value)) {
+        sending = true; next.disabled = true;
+        const out = {type:st.path};
+        Object.keys(st.data).forEach(k => { out[k.replace(/^f_/, '')] = Array.isArray(st.data[k]) ? st.data[k].join(', ') : st.data[k]; });
+        const ok2 = await send('flow-' + st.path, out, st.path === 'career' ? st.file : null);
+        sending = false; next.disabled = false;
+        if (!ok2){ body.querySelector('#ffErr').classList.add('show'); return; }
+      }
     }
     if (dir > 0 && !valid(s)) return;
     st.i = Math.max(0, Math.min(steps().length - 1, st.i + dir));
@@ -243,7 +305,7 @@
   function open(path){
     lastFocus = document.activeElement;
     const cur = steps()[st.i];
-    if (!st.path || (cur && cur.type === 'done') || (path && path !== st.path)) st = {path:null, i:0, data:{}, direct:false};
+    if (!st.path || (cur && cur.type === 'done') || (path && path !== st.path)) st = {path:null, i:0, data:{}, direct:false, file:null};
     if (path){ st.path = path; st.data.audience = path; st.i = Math.max(st.i, 1); st.direct = true; }
     render();
     flow.classList.add('open'); flow.setAttribute('aria-hidden', 'false');
@@ -255,7 +317,7 @@
     flow.classList.remove('open'); flow.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('locked');
     const cur = steps()[st.i];
-    if (cur && cur.type === 'done') st = {path:null, i:0, data:{}, direct:false};
+    if (cur && cur.type === 'done') st = {path:null, i:0, data:{}, direct:false, file:null};
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
   $$('[data-open]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); open(b.dataset.open); }));
